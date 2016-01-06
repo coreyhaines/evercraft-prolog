@@ -59,18 +59,22 @@ boundAtOne(Value, NewValue) :-
   NewValue is Value.
 
 
-relevantCharacterAbilities(Attacker, AttackerStrength, Defender, DefenderDexterity) :-
-  abilities(Defender, _, DefenderDexterity, _, _, _, _),
-  abilities(Attacker, AttackerStrength, _, _, _, _, _), !.
-
-attackCharacter(AttackerName, DefenderName, Roll) :-
+relevantCharacterAttributes(AttackerName, AttackerStrength, DefenderName, DefenderDexterity, DefenderAC, DefenderHP) :-
+  abilities(DefenderName, _, DefenderDexterity, _, _, _, _),
   character(DefenderName, _, DefenderAC),
   hitpoints(DefenderName, DefenderHP),
-  relevantCharacterAbilities(AttackerName, AttackerStrength, DefenderName, DefenderDexterity),
+  abilities(AttackerName, AttackerStrength, _, _, _, _, _), !.
+
+modifiedAttackNumbers(Roll, AttackerName, DefenderName, ModifiedAC, ModifiedRoll) :-
+  relevantCharacterAttributes(AttackerName, AttackerStrength, DefenderName, DefenderDexterity, DefenderAC, _),
   modifier(DefenderDexterity, ACModifier),
   modifier(AttackerStrength, RollModifier),
   ModifiedRoll is Roll + RollModifier,
-  ModifiedAC is DefenderAC + ACModifier,
+  ModifiedAC is DefenderAC + ACModifier.
+
+attackCharacter(AttackerName, DefenderName, Roll) :-
+  relevantCharacterAttributes(AttackerName, AttackerStrength, DefenderName, _, _, DefenderHP),
+  modifiedAttackNumbers(Roll, AttackerName, DefenderName, ModifiedAC, ModifiedRoll),
   attack(ModifiedRoll, ModifiedAC, AttackResult),
   damage(AttackResult, Roll, AttackerStrength, Damage),
   format("~p Damage ~p~n", [AttackResult, Damage]),
