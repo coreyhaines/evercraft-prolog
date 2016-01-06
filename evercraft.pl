@@ -22,6 +22,13 @@ newHitPoints(HP, Damage, NHP) :-
   HP > Damage,
   NHP is HP - Damage.
 
+attackCharacter(Name, Roll) :-
+  character(Name, Aligment, AC, HP),
+  attack(Roll, AC, AttackResult),
+  damage(AttackResult, Roll, Damage),
+  newHitPoints(HP, Damage, NHP), !,
+  asserta(character(Name, Alignment, AC, NHP)).
+
   %% Trying to figure out how to update the character
 :- dynamic character/4.
 
