@@ -13,10 +13,16 @@ attack(Roll, AC, miss) :-
   Roll < AC.
 
 %% Can get damage
-damage(miss, _, 0).
-damage(hit, Roll, 1) :-
-  Roll < 20, !.
-damage(hit, 20, 2).
+damage(miss, _, _, 0).
+damage(hit, Roll, Strength, Damage) :-
+  Roll < 20,
+  modifier(Strength, DamageModifier),
+  ModifiedDamage is 1 + DamageModifier,
+  boundAtOne(ModifiedDamage, Damage), !.
+damage(hit, 20, Strength, Damage) :-
+  modifier(Strength, DamageModifier),
+  ModifiedDamage is 2 + DamageModifier,
+  boundAtOne(ModifiedDamage, Damage), !.
 
 %% Can adjust hit points
 newHitPoints(HP, Damage, 0) :-
@@ -44,12 +50,16 @@ boundAtOne(Value, NewValue) :-
   NewValue is Value.
 
 attackCharacter(AttackerName, DefenderName, Roll) :-
-  character(AttackerName, _, _, _),
   character(DefenderName, DefenderAlignment, DefenderAC, DefenderHP),
   abilities(DefenderName, _, DefenderDexterity, _, _, _, _),
+  abilities(AttackerName, AttackerStrength, _, _, _, _, _),
   modifier(DefenderDexterity, ACModifier),
-  attack(Roll, (DefenderAC+ACModifier), AttackResult),
-  damage(AttackResult, Roll, Damage),
+  modifier(AttackerStrength, RollModifier),
+  ModifiedRoll is Roll + RollModifier,
+  ModifiedAC is DefenderAC + ACModifier,
+  attack(ModifiedRoll, ModifiedAC, AttackResult),
+  damage(AttackResult, Roll, AttackerStrength, Damage),
+  format("~p~n", [Damage]),
   newHitPoints(DefenderHP, Damage, NHP), !,
   asserta(character(DefenderName, DefenderAlignment, DefenderAC, NHP)).
 
