@@ -49,10 +49,14 @@ boundAtOne(Value, NewValue) :-
   Value >= 1,
   NewValue is Value.
 
+
+relevantCharacterAbilities(Attacker, AttackerStrength, Defender, DefenderDexterity) :-
+  abilities(Defender, _, DefenderDexterity, _, _, _, _),
+  abilities(Attacker, AttackerStrength, _, _, _, _, _), !.
+
 attackCharacter(AttackerName, DefenderName, Roll) :-
   character(DefenderName, DefenderAlignment, DefenderAC, DefenderHP),
-  abilities(DefenderName, _, DefenderDexterity, _, _, _, _),
-  abilities(AttackerName, AttackerStrength, _, _, _, _, _),
+  relevantCharacterAbilities(AttackerName, AttackerStrength, DefenderName, DefenderDexterity),
   modifier(DefenderDexterity, ACModifier),
   modifier(AttackerStrength, RollModifier),
   ModifiedRoll is Roll + RollModifier,
