@@ -27,6 +27,18 @@ newHitPoints(HP, Damage, NHP) :-
 modifier(AttributeValue, Modifier) :-
   Modifier is div(AttributeValue - 10, 2).
 
+%% Calculate Hit Point with Modifier
+adjustedHitPoint(Constitution, HP, AdjustedHP) :-
+  modifier(Constitution, Modifier),
+  Modified is HP + Modifier,
+  boundAtOne(Modified, AdjustedHP).
+
+boundAtOne(Value, NewValue) :-
+  Value < 1,
+  NewValue is 1, !.
+boundAtOne(Value, NewValue) :-
+  Value >= 1,
+  NewValue is Value.
 
 attackCharacter(AttackerName, DefenderName, Roll) :-
   character(AttackerName, _, _, _),
