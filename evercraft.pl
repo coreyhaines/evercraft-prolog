@@ -21,7 +21,7 @@ damage(hit, Roll, Strength, Damage) :-
   boundAtOne(ModifiedDamage, Damage), !.
 damage(hit, 20, Strength, Damage) :-
   modifier(Strength, DamageModifier),
-  ModifiedDamage is 2 + DamageModifier,
+  ModifiedDamage is 2 + 2*DamageModifier,
   boundAtOne(ModifiedDamage, Damage), !.
 
 %% Can adjust hit points
