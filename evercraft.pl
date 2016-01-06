@@ -3,6 +3,9 @@ alignment(good).
 alignment(neutral).
 alignment(evil).
 
+defaultHP(5).
+defaultAC(10).
+
 %% Can attack
 attack(Roll, AC, hit) :-
   Roll >= AC.
@@ -54,16 +57,21 @@ attackCharacter(AttackerName, DefenderName, Roll) :-
 :- dynamic character/4.
 :- dynamic abilities/7.
 
+
+%% defaultHP(DefaultHP),
+%% defaultAC(DefaultAC),
 %% asserta(abilities('corey', 5, 12, 6, 10, 4, 3)),
 %% abilities('corey', Strength, Dexterity, Constitution, Wisdom, Intelligence, Charisma), !,
-%% adjustedHitPoint(Constitution, 5, AdjustedHP),
-%% asserta(character('corey', good, 10, AdjustedHP)),
+%% adjustedHitPoint(Constitution, DefaultHP, AdjustedHP),
+%% asserta(character('corey', good, DefaultAC, AdjustedHP)),
 %% character('corey', A, AC, HP), !.
 
+%% defaultHP(DefaultHP),
+%% defaultAC(DefaultAC),
 %% asserta(abilities('nate', 6, 6, 16, 20, 6, 9)),
 %% abilities('nate', Strength, Dexterity, Constitution, Wisdom, Intelligence, Charisma), !,
-%% adjustedHitPoint(Constitution, 5, AdjustedHP),
-%% asserta(character('nate', good, 10, AdjustedHP)),
+%% adjustedHitPoint(Constitution, DefaultHP, AdjustedHP),
+%% asserta(character('nate', good, DefaultAC, AdjustedHP)),
 %% character('nate', A, AC, HP), !.
 %%
 %% attackCharacter('corey', 'nate', 10).
