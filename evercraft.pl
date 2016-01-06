@@ -22,6 +22,12 @@ newHitPoints(HP, Damage, NHP) :-
   HP > Damage,
   NHP is HP - Damage.
 
+
+%% Calculating modifier
+modifier(AttributeValue, Modifier) :-
+  Modifier is div(AttributeValue - 10, 2).
+
+
 attackCharacter(AttackerName, DefenderName, Roll) :-
   character(AttackerName, _, _, _),
   character(DefenderName, DefenderAlignment, DefenderAC, DefenderHP),
