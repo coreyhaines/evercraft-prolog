@@ -68,8 +68,9 @@ attackCharacter(AttackerName, DefenderName, Roll) :-
   asserta(character(DefenderName, DefenderAlignment, DefenderAC, NHP)).
 
   %% Trying to figure out how to update the character
-:- dynamic character/4.
+:- dynamic character/3.
 :- dynamic abilities/7.
+:- dynamic hitpoints/2.
 
 
 can(Roll) :-
@@ -83,20 +84,22 @@ nac(Roll) :-
 %% asserta(abilities('corey', 5, 12, 6, 10, 4, 3)),
 %% abilities('corey', Strength, Dexterity, Constitution, Wisdom, Intelligence, Charisma), !,
 %% adjustedHitPoint(Constitution, DefaultHP, AdjustedHP),
-%% asserta(character('corey', good, DefaultAC, AdjustedHP)),
-%% character('corey', A, AC, HP), !.
+%% asserta(character('corey', good, DefaultAC)),
+%% asserta(hitpoints('corey', AdjustedHP)),
+%% character('corey', A, AC), !.
 
 %% defaultHP(DefaultHP),
 %% defaultAC(DefaultAC),
 %% asserta(abilities('nate', 6, 6, 16, 20, 6, 9)),
 %% abilities('nate', Strength, Dexterity, Constitution, Wisdom, Intelligence, Charisma), !,
 %% adjustedHitPoint(Constitution, DefaultHP, AdjustedHP),
-%% asserta(character('nate', good, DefaultAC, AdjustedHP)),
-%% character('nate', A, AC, HP), !.
+%% asserta(character('nate', good, DefaultAC)),
+%% asserta(hitpoints('nate', AdjustedHP)),
+%% character('nate', A, AC), !.
 %%
 %% attackCharacter('corey', 'nate', 10).
 %%
-%% character('corey', A, AC, HP), !.
-%% character('nate', A, AC, HP), !.
+%% character('corey', A, AC), !.
+%% character('nate', A, AC), !.
 %% abilities('corey', Strength, Dexterity, Constitution, Wisdom, Intelligence, Charisma), !.
 %% abilities('nate', Strength, Dexterity, Constitution, Wisdom, Intelligence, Charisma), !.
