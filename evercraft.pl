@@ -42,13 +42,22 @@ attackCharacter(AttackerName, DefenderName, Roll) :-
 :- dynamic character/4.
 :- dynamic abilities/7.
 
-%% asserta(character('corey', good, 10, 5)).
-%% asserta(character('nate', evil, 10, 5)).
-%% asserta(abilities('corey', 5, 12, 6, 10, 4, 3)).
-%% asserta(abilities('nate', 6, 6, 16, 20, 6, 9)).
+%% asserta(abilities('corey', 5, 12, 6, 10, 4, 3)),
+%% abilities('corey', Strength, Dexterity, Constitution, Wisdom, Intelligence, Charisma), !,
+%% modifier(Constitution, Modifier),
+%% NewHP is 5 + Modifier,
+%% asserta(character('corey', good, 10, NewHP)),
+%% character('corey', A, AC, HP), !.
+
+%% asserta(abilities('nate', 6, 6, 16, 20, 6, 9)),
+%% abilities('nate', Strength, Dexterity, Constitution, Wisdom, Intelligence, Charisma), !,
+%% modifier(Constitution, Modifier),
+%% NewHP is 5 + Modifier,
+%% asserta(character('nate', good, 10, NewHP)),
+%% character('nate', A, AC, HP), !.
 %%
 %% attackCharacter('corey', 'nate', 10).
-
+%%
 %% character('corey', A, AC, HP), !.
 %% character('nate', A, AC, HP), !.
 %% abilities('corey', Strength, Dexterity, Constitution, Wisdom, Intelligence, Charisma), !.
