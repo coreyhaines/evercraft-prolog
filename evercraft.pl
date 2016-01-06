@@ -12,17 +12,21 @@ attack(Roll, AC, miss) :-
 %% Can get damage
 damage(miss, _, 0).
 damage(hit, Roll, 1) :-
-  Roll < 20.
+  Roll < 20, !.
 damage(hit, 20, 2).
 
 %% Can adjust hit points
 newHitPoints(HP, Damage, 0) :-
-  HP =< Damage.
+  HP =< Damage, !.
 newHitPoints(HP, Damage, NHP) :-
   HP > Damage,
   NHP is HP - Damage.
 
-%% Can create a character with an alignment
-character('corey', good).
+  %% Trying to figure out how to update the character
+:- dynamic character/4.
 
-%% Roll = 10, AC = 5, HitPoints = 10, attack(Roll, AC, AttackResult), damage(AttackResult, Roll, Damage), newHitPoints(HitPoints, Damage, NHP).
+%% asserta(character('corey', good, 10, 5)).
+%%
+%% Roll = 10, character('corey', Alignment, AC, HP), attack(Roll, AC, AttackResult), damage(AttackResult, Roll, Damage), newHitPoints(HP, Damage, NHP), !, asserta(character('corey', Alignment, AC, NHP)).
+%%
+%% character('corey', A, AC, HP), !.
