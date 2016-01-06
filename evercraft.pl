@@ -55,7 +55,8 @@ relevantCharacterAbilities(Attacker, AttackerStrength, Defender, DefenderDexteri
   abilities(Attacker, AttackerStrength, _, _, _, _, _), !.
 
 attackCharacter(AttackerName, DefenderName, Roll) :-
-  character(DefenderName, DefenderAlignment, DefenderAC, DefenderHP),
+  character(DefenderName, _, DefenderAC),
+  hitpoints(DefenderName, DefenderHP),
   relevantCharacterAbilities(AttackerName, AttackerStrength, DefenderName, DefenderDexterity),
   modifier(DefenderDexterity, ACModifier),
   modifier(AttackerStrength, RollModifier),
@@ -63,9 +64,10 @@ attackCharacter(AttackerName, DefenderName, Roll) :-
   ModifiedAC is DefenderAC + ACModifier,
   attack(ModifiedRoll, ModifiedAC, AttackResult),
   damage(AttackResult, Roll, AttackerStrength, Damage),
-  format("~p~n", [Damage]),
+  format("~p Damage ~p~n", [AttackResult, Damage]),
   newHitPoints(DefenderHP, Damage, NHP), !,
-  asserta(character(DefenderName, DefenderAlignment, DefenderAC, NHP)).
+  asserta(hitpoints(DefenderName, NHP)),
+  showCharacter(DefenderName).
 
   %% Trying to figure out how to update the character
 :- dynamic character/3.
@@ -78,6 +80,13 @@ can(Roll) :-
 
 nac(Roll) :-
   attackCharacter('nate', 'corey', Roll).
+
+showCharacter(Name) :-
+  character(Name, A, AC), !,
+  abilities(Name, Strength, Dexterity, Constitution, Wisdom, Intelligence, Charisma), !,
+  hitpoints(Name, HP), !,
+  format("~p HP: ~p~n", [Name, HP]).
+
 
 %% defaultHP(DefaultHP),
 %% defaultAC(DefaultAC),
@@ -98,8 +107,3 @@ nac(Roll) :-
 %% character('nate', A, AC), !.
 %%
 %% attackCharacter('corey', 'nate', 10).
-%%
-%% character('corey', A, AC), !.
-%% character('nate', A, AC), !.
-%% abilities('corey', Strength, Dexterity, Constitution, Wisdom, Intelligence, Charisma), !.
-%% abilities('nate', Strength, Dexterity, Constitution, Wisdom, Intelligence, Charisma), !.
