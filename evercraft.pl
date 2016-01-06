@@ -24,3 +24,5 @@ newHitPoints(HP, Damage, NHP) :-
 
 %% Can create a character with an alignment
 character('corey', good).
+
+%% Roll = 10, AC = 5, HitPoints = 10, attack(Roll, AC, AttackResult), damage(AttackResult, Roll, Damage), newHitPoints(HitPoints, Damage, NHP).
