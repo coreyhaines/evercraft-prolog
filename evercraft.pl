@@ -68,6 +68,12 @@ attackCharacter(AttackerName, DefenderName, Roll) :-
 :- dynamic abilities/7.
 
 
+can(Roll) :-
+  attackCharacter('corey', 'nate', Roll).
+
+nac(Roll) :-
+  attackCharacter('nate', 'corey', Roll).
+
 %% defaultHP(DefaultHP),
 %% defaultAC(DefaultAC),
 %% asserta(abilities('corey', 5, 12, 6, 10, 4, 3)),
