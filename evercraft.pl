@@ -7,6 +7,8 @@ defaultHP(5).
 defaultAC(10).
 defaultXP(0).
 
+experienceGainPerAttack(10).
+
 %% Calculating Level
 level(Experience, Level) :-
   Level is div(Experience,1000) + 1.
@@ -58,6 +60,13 @@ boundAtOne(Value, NewValue) :-
   Value >= 1,
   NewValue is Value.
 
+newExperience(Name, miss, NewXP) :-
+  experience(Name, NewXP), !.
+newExperience(Name, hit, NewXP) :-
+  experience(Name, PreviousXP),
+  experienceGainPerAttack(AdditionalXP),
+  NewXP is PreviousXP + AdditionalXP, !.
+
 
 relevantCharacterAttributes(AttackerName, AttackerStrength, DefenderName, DefenderDexterity, DefenderAC, DefenderHP) :-
   abilities(DefenderName, _, DefenderDexterity, _, _, _, _),
@@ -78,9 +87,12 @@ attackCharacter(AttackerName, DefenderName, Roll) :-
   attack(ModifiedRoll, ModifiedAC, AttackResult),
   damage(AttackResult, Roll, AttackerStrength, Damage),
   format("~p Damage ~p~n", [AttackResult, Damage]),
-  newHitPoints(DefenderHP, Damage, NHP), !,
+  newHitPoints(DefenderHP, Damage, NHP),
   asserta(hitpoints(DefenderName, NHP)),
-  showCharacter(DefenderName).
+  newExperience(AttackerName, AttackResult, NewXP),
+  asserta(experience(AttackerName, NewXP)),
+  showCharacter(AttackerName),
+  showCharacter(DefenderName), !.
 
   %% Trying to figure out how to update the character
 :- dynamic character/3.
@@ -95,10 +107,12 @@ nac(Roll) :-
   attackCharacter('nate', 'corey', Roll).
 
 showCharacter(Name) :-
-  character(Name, A, AC), !,
-  abilities(Name, Strength, Dexterity, Constitution, Wisdom, Intelligence, Charisma), !,
-  hitpoints(Name, HP), !,
-  format("~p HP: ~p~n", [Name, HP]).
+  character(Name, A, AC),
+  abilities(Name, Strength, Dexterity, Constitution, Wisdom, Intelligence, Charisma),
+  hitpoints(Name, HP),
+  characterLevel(Name, Level),
+  experience(Name, XP), !,
+  format("~p HP: ~p XP: ~p Level: ~p~n", [Name, HP, XP, Level]).
 
 
 %% defaultHP(DefaultHP),
