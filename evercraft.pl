@@ -31,7 +31,9 @@ modifier(AttributeValue, Modifier) :-
 attackCharacter(AttackerName, DefenderName, Roll) :-
   character(AttackerName, _, _, _),
   character(DefenderName, DefenderAlignment, DefenderAC, DefenderHP),
-  attack(Roll, DefenderAC, AttackResult),
+  abilities(DefenderName, _, DefenderDexterity, _, _, _, _),
+  modifier(DefenderDexterity, ACModifier),
+  attack(Roll, (DefenderAC+ACModifier), AttackResult),
   damage(AttackResult, Roll, Damage),
   newHitPoints(DefenderHP, Damage, NHP), !,
   asserta(character(DefenderName, DefenderAlignment, DefenderAC, NHP)).
