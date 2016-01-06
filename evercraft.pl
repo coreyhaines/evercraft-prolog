@@ -56,16 +56,14 @@ attackCharacter(AttackerName, DefenderName, Roll) :-
 
 %% asserta(abilities('corey', 5, 12, 6, 10, 4, 3)),
 %% abilities('corey', Strength, Dexterity, Constitution, Wisdom, Intelligence, Charisma), !,
-%% modifier(Constitution, Modifier),
-%% NewHP is 5 + Modifier,
-%% asserta(character('corey', good, 10, NewHP)),
+%% adjustedHitPoint(Constitution, 5, AdjustedHP),
+%% asserta(character('corey', good, 10, AdjustedHP)),
 %% character('corey', A, AC, HP), !.
 
 %% asserta(abilities('nate', 6, 6, 16, 20, 6, 9)),
 %% abilities('nate', Strength, Dexterity, Constitution, Wisdom, Intelligence, Charisma), !,
-%% modifier(Constitution, Modifier),
-%% NewHP is 5 + Modifier,
-%% asserta(character('nate', good, 10, NewHP)),
+%% adjustedHitPoint(Constitution, 5, AdjustedHP),
+%% asserta(character('nate', good, 10, AdjustedHP)),
 %% character('nate', A, AC, HP), !.
 %%
 %% attackCharacter('corey', 'nate', 10).
