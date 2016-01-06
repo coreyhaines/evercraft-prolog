@@ -10,9 +10,10 @@ attack(Roll, AC, miss) :-
   Roll < AC.
 
 %% Can get damage
-damage(Roll, 1) :-
+damage(miss, _, 0).
+damage(hit, Roll, 1) :-
   Roll < 20.
-damage(20, 2).
+damage(hit, 20, 2).
 
 %% Can adjust hit points
 newHitPoints(HP, Damage, 0) :-
