@@ -5,6 +5,15 @@ alignment(evil).
 
 defaultHP(5).
 defaultAC(10).
+defaultXP(0).
+
+%% Calculating Level
+level(Experience, Level) :-
+  Level is div(Experience,1000) + 1.
+
+characterLevel(Name, Level) :-
+  experience(Name, XP),
+  level(XP, Level).
 
 %% Can attack
 attack(Roll, AC, hit) :-
@@ -73,7 +82,7 @@ attackCharacter(AttackerName, DefenderName, Roll) :-
 :- dynamic character/3.
 :- dynamic abilities/7.
 :- dynamic hitpoints/2.
-
+:- dynamic experience/2.
 
 can(Roll) :-
   attackCharacter('corey', 'nate', Roll).
@@ -90,20 +99,24 @@ showCharacter(Name) :-
 
 %% defaultHP(DefaultHP),
 %% defaultAC(DefaultAC),
+%% defaultXP(DefaultXP),
 %% asserta(abilities('corey', 5, 12, 6, 10, 4, 3)),
 %% abilities('corey', Strength, Dexterity, Constitution, Wisdom, Intelligence, Charisma), !,
 %% adjustedHitPoint(Constitution, DefaultHP, AdjustedHP),
 %% asserta(character('corey', good, DefaultAC)),
 %% asserta(hitpoints('corey', AdjustedHP)),
+%% asserta(experience('corey', DefaultXP)),
 %% character('corey', A, AC), !.
 
 %% defaultHP(DefaultHP),
 %% defaultAC(DefaultAC),
+%% defaultXP(DefaultXP),
 %% asserta(abilities('nate', 6, 6, 16, 20, 6, 9)),
 %% abilities('nate', Strength, Dexterity, Constitution, Wisdom, Intelligence, Charisma), !,
 %% adjustedHitPoint(Constitution, DefaultHP, AdjustedHP),
 %% asserta(character('nate', good, DefaultAC)),
 %% asserta(hitpoints('nate', AdjustedHP)),
+%% asserta(experience('nate', DefaultXP)),
 %% character('nate', A, AC), !.
 %%
 %% attackCharacter('corey', 'nate', 10).
