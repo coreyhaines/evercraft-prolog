@@ -1,2 +1,2 @@
 # Evercraft-Prolog
-Doing the evercraft kata in prolog
+Doing the [evercraft](https://github.com/PuttingTheDnDInTDD/EverCraft-Kata) kata in prolog
