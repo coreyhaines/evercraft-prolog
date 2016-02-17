@@ -14,7 +14,7 @@ level(Experience, Level) :-
   Level is div(Experience,1000) + 1.
 
 characterLevel(Name, Level) :-
-  experience(Name, XP),
+  totalExperience(Name, XP),
   level(XP, Level).
 
 %% Can attack
@@ -29,6 +29,13 @@ sumRec([], Value, Value).
 sumRec([H|T], Value, Accum) :-
   sumRec(T, Value, OldAccum),
   Accum is OldAccum + H.
+
+%% Add up all the experiences gained
+totalExperience(Name, XP) :-
+  defaultXP(BaseXP),
+  findall(ExperienceAward, experienceAwarded(Name, ExperienceAward), ExperienceAwards),
+  sum(ExperienceAwards, TotalExperienceAwards),
+  XP is BaseXP + TotalExperienceAwards.
 
 %% Add up all the damages that have been done
 damageSoFar(Name, Damage) :-
@@ -82,12 +89,12 @@ boundAtOne(Value, NewValue) :-
   Value >= 1,
   NewValue is Value.
 
-newExperience(Name, miss, NewXP) :-
-  experience(Name, NewXP), !.
-newExperience(Name, hit, NewXP) :-
-  experience(Name, PreviousXP),
-  experienceGainPerAttack(AdditionalXP),
-  NewXP is PreviousXP + AdditionalXP, !.
+% newExperience(Name, miss, NewXP) :-
+  % experience(Name, NewXP), !.
+% newExperience(Name, hit, NewXP) :-
+  % experience(Name, PreviousXP),
+  % experienceGainPerAttack(AdditionalXP),
+  % NewXP is PreviousXP + AdditionalXP, !.
 
 
 relevantCharacterAttributes(AttackerName, AttackerStrength, DefenderName, DefenderDexterity, DefenderAC, DefenderHP) :-
@@ -109,22 +116,28 @@ registerDamage(Name, hit, Damage) :-
   format("Hit. ~p incurred ~p damage~n", [Name, Damage]),
   asserta(damageIncurred(Name, Damage)).
 
+registerExperienceAward(_, miss, _) :-
+  format("No Experience Gained~n").
+registerExperienceAward(Name, hit, Experience) :-
+  format("Gained ~p experience~n", [Experience]),
+  asserta(experienceAwarded(Name, Experience)).
+
 attackCharacter(AttackerName, DefenderName, Roll) :-
   relevantCharacterAttributes(AttackerName, AttackerStrength, DefenderName, _, _, _),
   modifiedAttackNumbers(Roll, AttackerName, DefenderName, ModifiedAC, ModifiedRoll),
   attack(ModifiedRoll, ModifiedAC, AttackResult),
   damage(AttackResult, Roll, AttackerStrength, Damage),
   registerDamage(DefenderName, AttackResult, Damage),
-  newExperience(AttackerName, AttackResult, NewXP),
-  asserta(experience(AttackerName, NewXP)),
+  experienceGainPerAttack(AdditionalXP),
+  registerExperienceAward(AttackerName, AttackResult, AdditionalXP),
   showCharacter(AttackerName),
   showCharacter(DefenderName), !.
 
   %% Trying to figure out how to update the character
 :- dynamic character/3.
 :- dynamic abilities/7.
-:- dynamic experience/2.
 :- dynamic damageIncurred/2.
+:- dynamic experienceAwarded/2.
 
 can(Roll) :-
   attackCharacter('corey', 'nate', Roll).
@@ -137,24 +150,20 @@ showCharacter(Name) :-
   abilities(Name, _Strength, _Dexterity, _Constitution, _Wisdom, _Intelligence, _Charisma),
   currentHitPoints(Name, HP),
   characterLevel(Name, Level),
-  experience(Name, XP), !,
+  totalExperience(Name, XP), !,
   format("~p HP: ~p XP: ~p Level: ~p~n", [Name, HP, XP, Level]).
 
 
-%% defaultAC(DefaultAC),
-%% defaultXP(DefaultXP),
-%% asserta(abilities('corey', 5, 12, 6, 10, 4, 3)),
-%% abilities('corey', Strength, Dexterity, Constitution, Wisdom, Intelligence, Charisma), !,
-%% asserta(character('corey', good, DefaultAC)),
-%% asserta(experience('corey', DefaultXP)),
-%% character('corey', A, AC), !.
+% defaultAC(DefaultAC),
+% asserta(abilities('corey', 5, 12, 6, 10, 4, 3)),
+% abilities('corey', Strength, Dexterity, Constitution, Wisdom, Intelligence, Charisma), !,
+% asserta(character('corey', good, DefaultAC)),
+% character('corey', A, AC), !.
 
-%% defaultAC(DefaultAC),
-%% defaultXP(DefaultXP),
-%% asserta(abilities('nate', 6, 6, 16, 20, 6, 9)),
-%% abilities('nate', Strength, Dexterity, Constitution, Wisdom, Intelligence, Charisma), !,
-%% asserta(character('nate', good, DefaultAC)),
-%% asserta(experience('nate', DefaultXP)),
-%% character('nate', A, AC), !.
-%%
-%% attackCharacter('corey', 'nate', 10).
+% defaultAC(DefaultAC),
+% asserta(abilities('nate', 6, 6, 16, 20, 6, 9)),
+% abilities('nate', Strength, Dexterity, Constitution, Wisdom, Intelligence, Charisma), !,
+% asserta(character('nate', good, DefaultAC)),
+% character('nate', A, AC), !.
+%
+% attackCharacter('corey', 'nate', 10).
