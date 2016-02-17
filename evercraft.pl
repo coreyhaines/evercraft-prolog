@@ -146,8 +146,6 @@ nac(Roll) :-
   attackCharacter('nate', 'corey', Roll).
 
 showCharacter(Name) :-
-  character(Name, _A, _AC),
-  abilities(Name, _Strength, _Dexterity, _Constitution, _Wisdom, _Intelligence, _Charisma),
   currentHitPoints(Name, HP),
   characterLevel(Name, Level),
   totalExperience(Name, XP), !,
