@@ -155,13 +155,13 @@ showCharacter(Name) :-
 % defaultAC(DefaultAC),
 % asserta(abilities('corey', 5, 12, 6, 10, 4, 3)),
 % abilities('corey', Strength, Dexterity, Constitution, Wisdom, Intelligence, Charisma), !,
-% asserta(character('corey', good, DefaultAC)),
+% asserta(character('corey', alignment(good), DefaultAC)),
 % character('corey', A, AC), !.
 
 % defaultAC(DefaultAC),
 % asserta(abilities('nate', 6, 6, 16, 20, 6, 9)),
 % abilities('nate', Strength, Dexterity, Constitution, Wisdom, Intelligence, Charisma), !,
-% asserta(character('nate', good, DefaultAC)),
+% asserta(character('nate', alignment(evil), DefaultAC)),
 % character('nate', A, AC), !.
 %
 % attackCharacter('corey', 'nate', 10).
